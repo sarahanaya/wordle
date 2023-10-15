@@ -78,6 +78,26 @@ function isWordValid(word) {
     return dictionary.includes(word);
 }
 
+function getNumOfOccurrencesInWord(word, letter) {
+    let result = 0;
+    for (let i = 0; i < word.length; i++) {
+        if (word[i] === letter) {
+            result++;
+        }
+    }
+    return result;
+}
+
+function getPositionOfOccurrence(word, letter, position) {
+    let result = 0;
+    for (let i = 0; i <= position; i++) {
+        if (word[i] === letter) {
+            result++;
+        }
+    }
+    return result;
+}
+
 function revealWord(guess) {
     const row = state.currentRow; // get current row
     const animation_duration = 500; // in ms
@@ -85,13 +105,28 @@ function revealWord(guess) {
         const box = document.getElementById(`box${row}${i}`); // get current box
         const letter = box.textContent; // get current letter
 
+        const numOfOccurrencesSecret = getNumOfOccurrencesInWord(
+            state.secret,
+            letter
+        );
+
+        const numOfOccurrencesGuess = getNumOfOccurrencesInWord(guess, letter);
+        const letterPosition = getPositionOfOccurrence(guess, letter, i);
+
         setTimeout(() => {
-            if (letter === state.secret[i]) {
-                box.classList.add('right');
-            } else if (state.secret.includes(letter)) {
-                box.classList.add('wrong'); // right letter wrong spot
+            if (
+                numOfOccurrencesGuess > numOfOccurrencesSecret &&
+                letterPosition > numOfOccurrencesSecret
+            ) {
+                box.classList.add('empty');
             } else {
-                box.classList.add('empty'); // letter not in word
+                if (letter === state.secret[i]) {
+                    box.classList.add('right');
+                } else if (state.secret.includes(letter)) {
+                    box.classList.add('wrong');
+                } else {
+                    box.classList.add('empty');
+                }
             }
         }, ((i + 1) * animation_duration) / 2);
 
@@ -137,7 +172,7 @@ function startup() {
     drawGrid(game);
 
     registerKeyboardEvents();
-    //console.log(state.secret); 
+    console.log(state.secret);
 
 }
 
