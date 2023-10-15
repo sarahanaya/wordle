@@ -3,6 +3,14 @@ body {
     background: var(--default);
 }
 
+h1 {
+    color: white;
+    text-align: center;
+    padding: 0;
+    margin: 20px 0 -50px 0;
+    font-size: 50px;
+}
+
 :root {
     --default: #121213;
     --empty: #3a3a3c;
